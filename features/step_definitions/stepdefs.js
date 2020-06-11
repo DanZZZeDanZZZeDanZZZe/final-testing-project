@@ -1,30 +1,14 @@
-const assert = require('assert');
 const {By} = require('selenium-webdriver')
-const {Given, When, Then, setDefaultTimeout, AfterAll} = require('cucumber');
+const cucumber = require('cucumber');
 const {createDriver} = require('../../test/test')
-const {BROWSER, TIMEOUT, ADMIN_PAGE} = require('../../constants')
+const {BROWSER, TIMEOUT} = require('../../constants/constants')
+const helpers = require('../../scripts/scripts')
 
-setDefaultTimeout(TIMEOUT)
+const {checkPageUrl, checkMenuListItem, clickMenuListItem} = helpers
+const {Given, When, Then, setDefaultTimeout, AfterAll} = cucumber
+
 const driver = createDriver(BROWSER)
-
-const checkAdminPageUrl = async () => {
-  const currentUrl = await driver.getCurrentUrl() 
-  return assert.equal(currentUrl, ADMIN_PAGE) ? 
-    true : 
-    false
-}
-
-const checkMenuListItem = (name) => {
-  const xpath = `//span[contains(., ${name})]`
-  $span = driver.findElement(By.xpath(xpath))
-  return $span || null
-}
-
-const clickMenuListItem = async (name) => {
-  $span = checkMenuListItem(name)
-  await $span.click($span)  
-}
-
+setDefaultTimeout(TIMEOUT)
 // 1) Scenario: Go to the admin panel
 
 // Given open "http://localhost/litecart/admin/login.php" page
@@ -64,8 +48,7 @@ When(
 Then(
   'i have to go to the page {string} page', 
   async function (string) {
-    await driver.sleep(10000)
-    return await checkAdminPageUrl()
+    return await checkPageUrl(driver, string)
   }
 )
 
@@ -74,25 +57,23 @@ Then(
 // Given i open "http://localhost/litecart/admin/" page
 Given('i open {string} page', async function (string) {
   await driver.get(string)
-  await driver.sleep(10000)
-  return await checkAdminPageUrl()
+  return await checkPageUrl(driver, string)
 })
 
-// When i Click "Appearance"
+// When i Click <menu>
 When('i Click {string}', async function (string) {
-  await clickMenuListItem(string)
+  await clickMenuListItem(driver, string)
 })
 
-// And i Check "Looogotype"
+// And i Check <menu_item>
 When('i Check {string}', function (string) {
-  this.$listItem = checkMenuListItem(string)
+  this.$listItem = checkMenuListItem(driver, string)
 })
 
 // And i will return to the "http://localhost/litecart/admin/" page
 When('i will return to the {string} page', async function (string) {
   await driver.get(string)
-  await driver.sleep(10000)
-  return await checkAdminPageUrl()
+  return await checkPageUrl(driver, string)
 })
 
 // Then menu item exists
