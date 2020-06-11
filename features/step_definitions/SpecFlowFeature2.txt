@@ -1,0 +1,70 @@
+﻿Scenario Outline: Header check
+		Given an open page at "http://localhost/litecart/admin/login.php" 
+		When i click <menu>
+		And i check <menu_header>
+		Then menu item exists
+
+		Examples:
+
+Feature: SpecFlowFeature2
+	In order to avoid silly mistakes
+	As a math idiot
+	I want to be told the sum of two numbers
+
+@mytag
+Scenario: Check Header
+	Given I open "http://localhost/litecart/admin/" pag
+	When  I login with "admin" user and "admin" password
+	And I Click <menu>
+	And I Check <menu_item>
+	Then menu item exists
+
+	Examples:
+| menu | menu_item |
+| "Appearence" | "Template" |
+| "Appearence" | Logotype |
+| Catalog | Catalog |
+| Catalog | Product Groups |
+| Catalog | Option Groups |
+| Catalog | Manufacturers |
+| Catalog | Suppliers |
+| Catalog | Delivery Statuses |
+| Catalog | Sold Out Statuses |
+| Catalog | Quantity Units |
+| Catalog | CSV Import/Export |
+| Customers | Customers |
+| Customers | CSV Import/Export |
+| Customers | Newsletter |
+| Counters | Counters |
+| Geo | Zones |
+| Languages | Languages |
+| Languages | Storage Encoding |
+| Modules | Background Jobs |
+| Modules | Customer |
+| Modules | Shipping |
+| Modules | Payment |
+| Modules | Order Total |
+| Modules | Order Success |
+| Modules | Order Action |
+| Orders | Orders |
+| Orders | Orders Statuses |
+| Pages | Pages |
+| Reports | Monthly Sales |
+| Reports | Most Sold Products |
+| Reports | Most Shopping Customers |
+| Settings | Store Info |
+| Settings | Defaults |
+| Settings | General |
+| Settings | Listings |
+| Settings | Images |
+| Settings | Checkout |
+| Settings | Advanced |
+| Settings | Security |
+| Slide | Slide |
+| Tax | Tax Classes |
+| Tax | Tax Rates |
+| Translations | Search Translations |
+| Translations | Scan Files |
+| Translations | CSV Import/Export |
+| User | User |
+| vQmods | vQmods |
