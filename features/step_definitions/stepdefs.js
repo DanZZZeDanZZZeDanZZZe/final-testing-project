@@ -1,13 +1,14 @@
-const assert = require('assert');
-const {By, until} = require('selenium-webdriver')
-const {Given, When, Then, After, setDefaultTimeout} = require('cucumber');
+const {By} = require('selenium-webdriver')
+const cucumber = require('cucumber');
 const {createDriver} = require('../../test/test')
-const {BROWSER, TIMEOUT, ADMIN_PAGE} = require('../../constants')
+const {BROWSER, TIMEOUT} = require('../../constants/constants')
+const helpers = require('../../scripts/scripts')
 
-const timeout = {timeout: TIMEOUT}
-setDefaultTimeout(TIMEOUT)
+const {checkPageUrl, checkMenuListItem, clickMenuListItem} = helpers
+const {Given, When, Then, setDefaultTimeout, AfterAll} = cucumber
+
 const driver = createDriver(BROWSER)
-
+setDefaultTimeout(TIMEOUT)
 // 1) Scenario: Go to the admin panel
 
 // Given open "http://localhost/litecart/admin/login.php" page
@@ -47,16 +48,40 @@ When(
 Then(
   'i have to go to the page {string} page', 
   async function (string) {
-    await driver.wait(
-      until.elementLocated(By.id('box-apps-menu')), 
-      2000
-    )
-    const currentUrl = await driver.getCurrentUrl() 
-    assert.equal(currentUrl, ADMIN_PAGE)
+    return await checkPageUrl(driver, string)
   }
 )
 
-After(
+// 2) Scenario: Check Header # features\step_definitions\checking_store.feature:19
+
+// Given i open "http://localhost/litecart/admin/" page
+Given('i open {string} page', async function (string) {
+  await driver.get(string)
+  return await checkPageUrl(driver, string)
+})
+
+// When i Click <menu>
+When('i Click {string}', async function (string) {
+  await clickMenuListItem(driver, string)
+})
+
+// And i Check <menu_item>
+When('i Check {string}', function (string) {
+  this.$listItem = checkMenuListItem(driver, string)
+})
+
+// And i will return to the "http://localhost/litecart/admin/" page
+When('i will return to the {string} page', async function (string) {
+  await driver.get(string)
+  return await checkPageUrl(driver, string)
+})
+
+// Then menu item exists
+Then('menu item exists', function () {
+  return this.$listItem ? true : false
+})
+
+AfterAll(
   async function () {
     await driver.quit()
   }
